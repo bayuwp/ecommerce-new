@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('produk', function (Blueprint $table) {
+        Schema::table('produks', function (Blueprint $table) {
             $table->index('kategori_id');
             $table->index('nama');
             $table->index('harga');
@@ -17,7 +17,7 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::table('produk', function (Blueprint $table) {
+        Schema::table('produks', function (Blueprint $table) {
             $table->dropIndex(['kategori_id']);
             $table->dropIndex(['nama']);
             $table->dropIndex(['harga']);

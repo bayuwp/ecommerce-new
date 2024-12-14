@@ -11,31 +11,35 @@
         </button>
     </div>
 
-    <div class="container my-5">
-        <div class="row mt-1">
+    <div class="container">
+        <div class="row">
             @foreach($produk as $item)
-                <div class="col-md-3 mb-4">
-                    <div class="card">
-                        <img src="{{ asset('storage/' . $item->foto_produk) }}" class="card-img-top img-fluid" alt="{{ $item->nama }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $item->nama }}</h5>
-                            <p class="card-text">Rp{{ number_format($item->harga, 0, ',', '.') }}</p>
-                            <p class="card-text">{{ Str::limit($item->deskripsi, 100) }}</p>
-
-                            <!-- Tombol Lihat Detail -->
-                            <button class="btn btn-primary" onclick="showDetail({{ $item->id }})">Lihat Detail</button>
-
-                            <!-- Form untuk Menambah Produk ke Keranjang -->
-                            <form action="{{ route('carts.add') }}" method="POST" class="mt-2">
-                                @csrf
-                                <input type="hidden" name="produk_id" value="{{ $item->id }}">
-                                <label for="quantity_{{ $item->id }}" class="form-label">Jumlah:</label>
-                                <input type="number" name="quantity" id="quantity_{{ $item->id }}" class="form-control" min="1" value="1" required>
-                                <button type="submit" class="btn btn-success mt-2">Tambah ke Keranjang</button>
-                            </form>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Product -->
+                <div class="single-product">
+                    <div class="product-image" style="position: relative;width: 100%;height: 300px;overflow: hidden;">
+                        <img src="{{ asset('storage/' . $item->foto_produk) }}" alt="#" style="width: 100%; height: 300px; object-fit: cover;">
+                        <form action="{{ route('carts.add') }}" method="POST" class="mt-2">
+                            @csrf
+                            <input type="hidden" name="produk_id" value="{{ $item->id }}">
+                            <input type="hidden" name="quantity" id="quantity_{{ $item->id }}" class="form-control" min="1" value="1" required>
+                            <div class="button">
+                                <button type="submit" class="btn"><i class="lni lni-cart"></i> Add to Cart</button>
+                            </div>  
+                        </form>
+                    </div>
+                    <div class="product-info">
+                        <span class="category">{{ $item->kategori_nama }}</span>
+                        <h4 class="title">
+                            <a href="product-grids.html">{{ $item->nama }}</a>
+                        </h4>
+                        <div class="price">
+                            <span>Rp{{ number_format($item->harga, 0, ',', '.') }}</span>
                         </div>
                     </div>
                 </div>
+                <!-- End Single Product -->
+            </div>
             @endforeach
         </div>
     </div>

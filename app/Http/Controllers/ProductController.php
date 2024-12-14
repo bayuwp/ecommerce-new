@@ -10,8 +10,7 @@ use App\Models\Product;
 use App\Models\Produk;
 use App\Models\Kategori;
 use Illuminate\Http\Response;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends DashboardController
 {
@@ -36,6 +35,7 @@ class ProductController extends DashboardController
     //     $selectedCategory = null;
     // }
     // Mengembalikan view dengan variabel yang tepat
+
     return view('pages.admin.produk', [
         'products' => $products,
         'kategoris' => $kategoris,
@@ -48,6 +48,7 @@ class ProductController extends DashboardController
      */
     public function store(StoreRequest $request)
     {
+        // return $request;
         try {
             $validated = $request->validated();
 

@@ -10,7 +10,7 @@ class Pelanggan extends Model
     use HasFactory;
 
     // Menentukan nama tabel di database
-    protected $table = 'pelanggan';
+    protected $table = 'pelanggans';
 
     // Menentukan kolom yang dapat diisi
     protected $fillable = [

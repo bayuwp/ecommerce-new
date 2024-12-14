@@ -12,18 +12,22 @@ class HomeController extends Controller
     public function index()
     {
         $kategoris = Kategori::all();
-        $produk = Produk::all();
+        $produk = Produk::join('kategoris', 'produks.kategori_id', '=', 'kategoris.id')
+                ->select('produks.*', 'kategoris.nama as kategori_nama')
+                ->get();
         $bestSellingProducts = Produk::orderBy('sold', 'desc')->take(5)->get();
         $recommendedProducts = Produk::inRandomOrder()->take(5)->get();
 
         $cartCount = auth()->check() ? auth()->user()->carts->count() : 0;
+        $carts = auth()->check() ? auth()->user()->carts : 0;
 
         return view('home', [
             'kategoris' => $kategoris,
             'produk' => $produk,
             'bestSellingProducts' => $bestSellingProducts,
             'recommendedProducts' => $recommendedProducts,
-            'cartCount' => $cartCount
+            'cartCount' => $cartCount,
+            'carts' =>  $carts
         ]);
 
     }

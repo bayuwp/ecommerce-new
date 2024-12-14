@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('produk_id')->nullable(); // Menambahkan kolom produk_id
 
             // Jika Anda ingin mengatur foreign key
-            $table->foreign('pelanggan_id')->references('id')->on('pelanggan')->onDelete('cascade');
-            $table->foreign('produk_id')->references('id')->on('produk')->onDelete('cascade');
+            $table->foreign('pelanggan_id')->references('id')->on('pelanggans')->onDelete('cascade');
+            $table->foreign('produk_id')->references('id')->on('produks')->onDelete('cascade');
         });
     }
 

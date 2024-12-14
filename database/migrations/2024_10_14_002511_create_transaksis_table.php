@@ -8,10 +8,10 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('transaksi', function (Blueprint $table) {
+        Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pelanggan_id')->constrained('pelanggan')->onDelete('cascade');
-            $table->foreignId('produk_id')->constrained('produk')->onDelete('cascade');
+            $table->foreignId('pelanggan_id')->constrained('pelanggans')->onDelete('cascade');
+            $table->foreignId('produk_id')->constrained('produks')->onDelete('cascade');
             $table->decimal('total_harga', 10, 2);
             $table->text('deskripsi')->nullable();
             $table->string('nomer_invoice');
@@ -24,6 +24,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('transaksi');
+        Schema::dropIfExists('transaksis');
     }
 };

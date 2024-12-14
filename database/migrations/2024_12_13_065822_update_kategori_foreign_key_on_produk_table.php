@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::table('produk', function (Blueprint $table) {
+        Schema::table('produks', function (Blueprint $table) {
             // Hapus foreign key lama
             $table->dropForeign(['kategori_id']);
 
@@ -19,7 +19,7 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::table('produk', function (Blueprint $table) {
+        Schema::table('produks', function (Blueprint $table) {
             // Hapus foreign key yang merujuk ke 'kategoris'
             $table->dropForeign(['kategori_id']);
 
