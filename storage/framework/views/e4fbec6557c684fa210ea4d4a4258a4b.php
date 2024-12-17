@@ -1,14 +1,13 @@
-@extends('layouts.app')
-
-@section('container')
+<?php $__env->startSection('container'); ?>
 <div class="container">
     <h1 class="mt-4">Daftar Transaksi</h1>
 
-    @if (session('status'))
+    <?php if(session('status')): ?>
         <div class="alert alert-success">
-            {{ session('status') }}
+            <?php echo e(session('status')); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 
 
     <table class="table table-bordered mt-3">
@@ -27,31 +26,31 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($transaktions as $transaksi)
+            <?php $__empty_1 = true; $__currentLoopData = $transaktions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $transaksi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
                     <td>
-                        <input type="checkbox" class="transaction-checkbox" data-amount="{{ $transaksi->gross_amount }}" aria-label="Pilih transaksi {{ $transaksi->order_id }}">
+                        <input type="checkbox" class="transaction-checkbox" data-amount="<?php echo e($transaksi->gross_amount); ?>" aria-label="Pilih transaksi <?php echo e($transaksi->order_id); ?>">
                     </td>
-                    <td>{{ $transaksi->order_id }}</td>
-                    <td>{{ $transaksi->user_id->name ?? 'N/A' }}</td>
-                    <td>{{ $transaksi->produk->nama ?? 'N/A' }}</td>
-                    <td>{{ $transaksi->payment_type ?? 'N/A' }}</td>
-                    <td>Rp {{ number_format($transaksi->gross_amount, 0, ',', '.') }}</td>
-                    <td>{{ $transaksi->transaction_time ? \Carbon\Carbon::parse($transaksi->transaction_time)->format('Y-m-d H:i:s') : 'N/A' }}</td>
-                    <td>{{ ucfirst($transaksi->transaction_status) }}</td>
+                    <td><?php echo e($transaksi->order_id); ?></td>
+                    <td><?php echo e($transaksi->pelanggan->nama_lengkap ?? 'N/A'); ?></td>
+                    <td><?php echo e($transaksi->produk->nama ?? 'N/A'); ?></td>
+                    <td><?php echo e($transaksi->payment_type ?? 'N/A'); ?></td>
+                    <td>Rp <?php echo e(number_format($transaksi->gross_amount, 0, ',', '.')); ?></td>
+                    <td><?php echo e($transaksi->transaction_time ? \Carbon\Carbon::parse($transaksi->transaction_time)->format('Y-m-d H:i:s') : 'N/A'); ?></td>
+                    <td><?php echo e(ucfirst($transaksi->transaction_status)); ?></td>
                     <td>
-                        <pre class="bg-light p-2">{{ json_encode(json_decode($transaksi->metadata), JSON_PRETTY_PRINT) }}</pre>
+                        <pre class="bg-light p-2"><?php echo e(json_encode(json_decode($transaksi->metadata), JSON_PRETTY_PRINT)); ?></pre>
                     </td>
                     <td>
-                        <button class="btn btn-primary btn-sm" onclick="showDetails('{{ $transaksi->order_id }}')">Detail</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteTransaction('{{ $transaksi->order_id }}')">Hapus</button>
+                        <button class="btn btn-primary btn-sm" onclick="showDetails('<?php echo e($transaksi->order_id); ?>')">Detail</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTransaction('<?php echo e($transaksi->order_id); ?>')">Hapus</button>
                     </td>
                 </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="10" class="text-center">Tidak ada transaksi ditemukan.</td>
                 </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
 
@@ -60,7 +59,7 @@
         <button class="btn btn-success btn-lg" onclick="checkout()">Checkout</button>
     </div>
 
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo e(env('MIDTRANS_CLIENT_KEY')); ?>"></script>
     <script>
         document.querySelectorAll('.transaction-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', calculateTotal);
@@ -96,10 +95,10 @@
             shipping_service: 'Service Name Here',
         };
         $.ajax({
-            url: "{{ route('checkout.saveTransaction') }}",
+            url: "<?php echo e(route('checkout.saveTransaction')); ?>",
             type: 'POST',
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
             },
             data: transactionData,
             success: function(response) {
@@ -120,10 +119,10 @@
         function deleteTransaction(orderId) {
             if (confirm("Apakah Anda yakin ingin menghapus transaksi ini?")) {
                 $.ajax({
-                    url: "{{ route('transactions.delete', ':orderId') }}".replace(':orderId', orderId),
+                    url: "<?php echo e(route('transactions.delete', ':orderId')); ?>".replace(':orderId', orderId),
                     type: 'DELETE',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                     },
                     success: function(data) {
                         alert(data.message);
@@ -138,4 +137,6 @@
         }
     </script>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\ASUS\Documents\MSIB\e_commerce\pw1-bast7-bayu\Tugas7\resources\views/pages/admin/transaksi.blade.php ENDPATH**/ ?>

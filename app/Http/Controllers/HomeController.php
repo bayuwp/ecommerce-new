@@ -43,4 +43,16 @@ class HomeController extends Controller
         return view('pages.cart.index', compact('kategoris'));
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $kategori = $request->input('kategori', 'all');
+
+        if ($category != 'all') {
+            $results = $results->where('kategori_id', $kategori);
+        }
+        $results = Produk::where('nama')->get();
+        return view('user.navbar', compact('results'));
+    }
+
 }

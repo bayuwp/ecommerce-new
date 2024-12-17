@@ -1,6 +1,6 @@
 <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">E-commerce</a>
+        <a class="navbar-brand" href="<?php echo e(url('/')); ?>">E-commerce</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -14,13 +14,14 @@
                             Kategori
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            @foreach($kategoris as $kategori)
+                            <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('produk.byKategori', $kategori->id) }}">
-                                        {{ $kategori->nama }}
+                                    <a class="dropdown-item" href="<?php echo e(route('produk.byKategori', $kategori->id)); ?>">
+                                        <?php echo e($kategori->nama); ?>
+
                                     </a>
                                 </li>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </li>
 
@@ -29,13 +30,13 @@
                             Produk Terlaris
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="bestSellingDropdown">
-                            @foreach($bestSellingProducts as $product)
+                            <?php $__currentLoopData = $bestSellingProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('produk.show', $product->id) }}">
-                                        {{ $product->nama }} - {{ $product->sold }} terjual
+                                    <a class="dropdown-item" href="<?php echo e(route('produk.show', $product->id)); ?>">
+                                        <?php echo e($product->nama); ?> - <?php echo e($product->sold); ?> terjual
                                     </a>
                                 </li>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </li>
 
@@ -44,53 +45,56 @@
                             Produk Rekomendasi
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="recommendedDropdown">
-                            @foreach($recommendedProducts as $product)
+                            <?php $__currentLoopData = $recommendedProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('produk.show', $product->id) }}">
-                                        {{ $product->nama }}
+                                    <a class="dropdown-item" href="<?php echo e(route('produk.show', $product->id)); ?>">
+                                        <?php echo e($product->nama); ?>
+
                                     </a>
                                 </li>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
 
-        <form class="d-flex mx-auto" method="GET" action="{{ route('search') }}">
+        <form class="d-flex mx-auto" method="GET" action="<?php echo e(route('search')); ?>">
             <input class="form-control me-2" type="search" name="query" placeholder="Cari produk..." aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Cari</button>
         </form>
 
-        <a href="{{ route('carts.index') }}" class="nav-link">
+        <a href="<?php echo e(route('carts.index')); ?>" class="nav-link">
             <i class="fa fa-shopping-cart" style="font-size: 24px;"></i>
-            @if($cartCount > 0)
+            <?php if($cartCount > 0): ?>
                 <span class="badge bg-danger rounded-pill">
-                    {{ $cartCount }}
+                    <?php echo e($cartCount); ?>
+
                 </span>
-            @endif
+            <?php endif; ?>
         </a>
 
         <ul class="navbar-nav ms-auto">
-            @guest
-                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
-            @else
+            <?php if(auth()->guard()->guest()): ?>
+                <li class="nav-item"><a class="nav-link" href="<?php echo e(route('login')); ?>">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="<?php echo e(route('register')); ?>">Register</a></li>
+            <?php else: ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ Auth::user()->name }}
+                        <?php echo e(Auth::user()->name); ?>
+
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
                         <li>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
+                            <form action="<?php echo e(route('logout')); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
                                 <button type="submit" class="dropdown-item">Logout</button>
                             </form>
                         </li>
                     </ul>
                 </li>
-            @endguest
+            <?php endif; ?>
         </ul>
 
     </div>
@@ -105,7 +109,7 @@
                 <div class="col-lg-4 col-md-4 col-12">
                     <div class="top-middle">
                         <ul class="useful-links">
-                            <li><a href="{{ url('/') }}">Home</a></li>
+                            <li><a href="<?php echo e(url('/')); ?>">Home</a></li>
                             <li><a href="about-us.html">About Us</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
@@ -113,31 +117,31 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-12">
                     <div class="top-end">
-                        @guest
+                        <?php if(auth()->guard()->guest()): ?>
                         <ul class="user-login">
                             <li>
-                                <a href="{{ route('login') }}">Sign In</a>
+                                <a href="<?php echo e(route('login')); ?>">Sign In</a>
                             </li>
                             <li>
-                                <a href="{{ route('register') }}">Register</a>
+                                <a href="<?php echo e(route('register')); ?>">Register</a>
                             </li>
                         </ul>
-                        @else
+                        <?php else: ?>
                         <div class="user pr-0 mega-category-menu " style="padding-right: 0!important; border: none!important;">
-                            <span class="cat-button text-white"><i class="lni lni-user"></i>Hello, {{ Auth::user()->name }}</span>
+                            <span class="cat-button text-white"><i class="lni lni-user"></i>Hello, <?php echo e(Auth::user()->name); ?></span>
                             <ul class="sub-category" style="top: 30px!important; z-index: 99!important;">
                                 <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
+                                    <form action="<?php echo e(route('logout')); ?>" method="POST">
+                                        <?php echo csrf_field(); ?>
                                         <button type="submit" class="dropdown-item">Logout</button>
                                     </form>
                                 </li>
                                 <li>
-                                    <a href="{{ route('order.index') }}" class="dropdown-item">Order</a>
+                                    <a href="<?php echo e(route('order.index')); ?>" class="dropdown-item">Order</a>
                                 </li>
                             </ul>
                         </div>
-                        @endguest
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -150,10 +154,10 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-3 col-7">
                     <!-- Start Header Logo -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="<?php echo e(url('/')); ?>">
                         <div style="display: flex; align-items: center;">
                             <!-- Logo Gambar di Sebelah Kiri -->
-                            <img src="{{ asset('img/1.png') }}" alt="Logo" style="max-width: 90px; margin-right: 5px;">
+                            <img src="<?php echo e(asset('img/1.png')); ?>" alt="Logo" style="max-width: 90px; margin-right: 5px;">
 
                             <!-- Teks Bay Ecommerce di Sebelah Kanan -->
                             <span style="color: black; font-size: 30px; font-family: 'Arial', sans-serif; font-weight: 700;">BAY</span>
@@ -166,16 +170,16 @@
                     <!-- Start Main Menu Search -->
                     <div class="main-menu-search">
                         <!-- navbar search start -->
-                        <form action="{{ route('search') }}" method="GET">
+                        <form action="<?php echo e(route('search')); ?>" method="GET">
                             <div class="navbar-search search-style-5">
                                 <div class="search-select">
                                     <div class="select-position">
-                                        <form action="{{ route('search') }}" method="GET">
+                                        <form action="<?php echo e(route('search')); ?>" method="GET">
                                             <select id="select1" name="category">
                                                 <option value="all" selected>All</option>
-                                                @foreach ($kategoris as $kategori)
-                                                    <option value="{{ $kategori->id }}">{{ $kategori->name }}</option>
-                                                @endforeach
+                                                <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->name); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                     </div>
                                 </div>
@@ -202,32 +206,32 @@
                                 </a>
                             </div>
                             <div class="cart-items">
-                                @php
+                                <?php
                                     $carts = auth()->check() ? auth()->user()->carts : [];
                                     $cartCount = auth()->check() ? auth()->user()->carts->count() : 0;
                                     $totalPrice = 0;
                                     foreach ($carts as $cart) {
                                         $totalPrice += $cart->produk->harga * $cart->quantity; // harga * quantity
                                     }
-                                @endphp
+                                ?>
 
                                 <a href="javascript:void(0)" class="main-btn">
                                     <i class="lni lni-cart"></i>
-                                    <span class="total-items">{{  $cartCount }}</span>
+                                    <span class="total-items"><?php echo e($cartCount); ?></span>
                                 </a>
 
                                 <!-- Shopping Item -->
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
-                                        <span>{{  $cartCount }} Items</span>
-                                        <a href="{{ route('carts.index') }}">View Cart</a>
+                                        <span><?php echo e($cartCount); ?> Items</span>
+                                        <a href="<?php echo e(route('carts.index')); ?>">View Cart</a>
                                     </div>
                                     <ul class="shopping-list">
-                                        @foreach($carts as $cart)
+                                        <?php $__currentLoopData = $carts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cart): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <li>
-                                            <form action="{{ route('carts.remove') }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <input type="hidden" name="cart_id" value="{{ $cart->id }}">
+                                            <form action="<?php echo e(route('carts.remove')); ?>" method="POST" class="d-inline">
+                                                <?php echo csrf_field(); ?>
+                                                <input type="hidden" name="cart_id" value="<?php echo e($cart->id); ?>">
                                                 <button type="submit" href="javascript:void(0)" class="remove" title="Remove this item">
                                                     <i class="lni lni-close"></i>
                                                 </button>
@@ -235,22 +239,22 @@
 
                                             <div class="cart-img-head">
                                                 <a class="cart-img" href="product-details.html">
-                                                    <img src="{{ asset('storage/' . $cart->produk->foto_produk) }}" alt="{{ $cart->produk->nama }}">
+                                                    <img src="<?php echo e(asset('storage/' . $cart->produk->foto_produk)); ?>" alt="<?php echo e($cart->produk->nama); ?>">
                                                 </a>
                                             </div>
 
                                             <div class="content">
                                                 <h4><a href="product-details.html">
-                                                {{ $cart->produk->nama }}</a></h4>
-                                                <p class="quantity"><span class="amount">Rp {{ number_format($cart->produk->harga, 0, ',', '.') }}</span></p>
+                                                <?php echo e($cart->produk->nama); ?></a></h4>
+                                                <p class="quantity"><span class="amount">Rp <?php echo e(number_format($cart->produk->harga, 0, ',', '.')); ?></span></p>
                                             </div>
                                         </li>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </ul>
                                     <div class="bottom">
                                         <div class="total">
                                             <span>Total</span>
-                                            <span class="total-amount">Rp {{ number_format($totalPrice, 0, ',', '.') }}</span>
+                                            <span class="total-amount">Rp <?php echo e(number_format($totalPrice, 0, ',', '.')); ?></span>
                                         </div>
                                         <div class="button">
                                             <a href="checkout.html" class="btn animate">Checkout</a>
@@ -275,13 +279,14 @@
                     <div class="mega-category-menu">
                         <span class="cat-button"><i class="lni lni-menu"></i>All Categories</span>
                         <ul class="sub-category">
-                            @foreach($kategoris as $kategori)
+                            <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('produk.byKategori', $kategori->id) }}">
-                                        {{ $kategori->nama }}
+                                    <a class="dropdown-item" href="<?php echo e(route('produk.byKategori', $kategori->id)); ?>">
+                                        <?php echo e($kategori->nama); ?>
+
                                     </a>
                                 </li>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
                     <!-- End Mega Category Menu -->
@@ -385,3 +390,4 @@
         document.getElementById('profileDropdownMenu').classList.toggle('hidden');
     });
 </script>
+<?php /**PATH C:\Users\ASUS\Documents\MSIB\e_commerce\pw1-bast7-bayu\Tugas7\resources\views/user/navbar.blade.php ENDPATH**/ ?>

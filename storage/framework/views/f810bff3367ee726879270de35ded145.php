@@ -1,24 +1,25 @@
-@extends('user.app') <!-- Sesuaikan dengan layout Anda -->
+ <!-- Sesuaikan dengan layout Anda -->
 
-@section('container')
+<?php $__env->startSection('container'); ?>
 <div class="container mt-5">
     <h1>Keranjang Belanja</h1>
 
     <!-- Menampilkan Pesan Sukses -->
-    @if(session('success'))
+    <?php if(session('success')): ?>
         <div class="alert alert-success">
-            {{ session('success') }}
+            <?php echo e(session('success')); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Cek Apakah Keranjang Kosong -->
-    @if($carts->isEmpty())
+    <?php if($carts->isEmpty()): ?>
         <div class="alert alert-warning">
             Keranjang belanja Anda kosong.
         </div>
-    @else
-        <form action="{{ route('carts.checkout') }}" method="POST">
-            @csrf
+    <?php else: ?>
+        <form action="<?php echo e(route('carts.checkout')); ?>" method="POST">
+            <?php echo csrf_field(); ?>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -36,39 +37,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($carts as $key => $cart)
+                        <?php $__currentLoopData = $carts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $cart): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <td class="p-4">{{ $key + 1 }}</td>
+                            <td class="p-4"><?php echo e($key + 1); ?></td>
                             <td class="p-4">
-                                <img src="{{ asset('storage/' . $cart->produk->foto_produk) }}" class="w-16 md:w-32 max-w-full max-h-full" alt="Product Image">
+                                <img src="<?php echo e(asset('storage/' . $cart->produk->foto_produk)); ?>" class="w-16 md:w-32 max-w-full max-h-full" alt="Product Image">
                             </td>
                             <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
-                                {{ $cart->produk->nama }}
+                                <?php echo e($cart->produk->nama); ?>
+
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     <div class="ms-3">
-                                        <input type="number" id="quantity-{{ $cart->id }}" class="qty-input bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                value="{{ $cart->quantity }}" data-price="{{ $cart->produk->harga }}" data-cart-id="{{ $cart->id }}">
+                                        <input type="number" id="quantity-<?php echo e($cart->id); ?>" class="qty-input bg-gray-50 w-14 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-2.5 py-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                value="<?php echo e($cart->quantity); ?>" data-price="<?php echo e($cart->produk->harga); ?>" data-cart-id="<?php echo e($cart->id); ?>">
                                     </div>
                                 </div>
                             </td>
-                            <td>Rp <span class="price">{{ number_format($cart->produk->harga, 0, ',', '.') }}</span></td>
-                            <td class="subtotal"> <span id="subtotal-{{ $cart->id }}">{{ number_format($cart->produk->harga * $cart->quantity, 0, ',', '.') }}</span></td>
+                            <td>Rp <span class="price"><?php echo e(number_format($cart->produk->harga, 0, ',', '.')); ?></span></td>
+                            <td class="subtotal"> <span id="subtotal-<?php echo e($cart->id); ?>"><?php echo e(number_format($cart->produk->harga * $cart->quantity, 0, ',', '.')); ?></span></td>
                             <td>
-                                <input type="checkbox" class="transaction-checkbox" name="selected_products[]" value="{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-amount="{{ $cart->produk->harga * $cart->quantity }}" {{ in_array($cart->id, old('selected_products', [])) ? 'checked' : '' }}>
+                                <input type="checkbox" class="transaction-checkbox" name="selected_products[]" value="<?php echo e($cart->id); ?>" data-cart-id="<?php echo e($cart->id); ?>" data-amount="<?php echo e($cart->produk->harga * $cart->quantity); ?>" <?php echo e(in_array($cart->id, old('selected_products', [])) ? 'checked' : ''); ?>>
                             </td>
                             <td class="px-6 py-4">
                                 <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline">Remove</a>
                             </td>
                         </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
 
                 <div class="d-flex justify-content-between my-4">
                     <h3>Total: Rp <span id="totalHarga">
-                        @php
+                        <?php
                             $total = 0;
                             $selectedProducts = old('selected_products', []);
                             foreach($carts as $cart) {
@@ -77,7 +79,7 @@
                                 }
                             }
                             echo number_format($total, 0, ',', '.');
-                        @endphp
+                        ?>
                     </span></h3>
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button>
                 </div>
@@ -94,20 +96,20 @@
                             </button>
                         </div>
                         <form id="checkout-form">
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <div class="modal-body">
                                 <!-- Pilih Provinsi Asal -->
                                 <div class="form-group">
                                     <label for="origin-province" class="col-form-label">Provinsi Asal:</label>
                                     <select class="form-control" id="origin-province" name="origin_province" required>
                                         <option value="">Pilih Provinsi Asal</option>
-                                        @if(isset($provinces) && count($provinces) > 0)
-                                            @foreach ($provinces as $province)
-                                                <option value="{{ $province['province_id'] }}">{{ $province['province'] }}</option>
-                                            @endforeach
-                                        @else
+                                        <?php if(isset($provinces) && count($provinces) > 0): ?>
+                                            <?php $__currentLoopData = $provinces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $province): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($province['province_id']); ?>"><?php echo e($province['province']); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
                                             <option value="" disabled>Data provinsi tidak tersedia.</option>
-                                        @endif
+                                        <?php endif; ?>
                                     </select>
                                     <small class="form-text text-danger d-none" id="origin-province-error">Provinsi asal harus dipilih.</small>
                                 </div>
@@ -126,13 +128,13 @@
                                     <label for="destination-province" class="col-form-label">Provinsi Tujuan:</label>
                                     <select class="form-control" id="destination-province" name="destination_province" required>
                                         <option value="">Pilih Provinsi Tujuan</option>
-                                        @if(isset($provinces) && count($provinces) > 0)
-                                            @foreach ($provinces as $province)
-                                                <option value="{{ $province['province_id'] }}">{{ $province['province'] }}</option>
-                                            @endforeach
-                                        @else
+                                        <?php if(isset($provinces) && count($provinces) > 0): ?>
+                                            <?php $__currentLoopData = $provinces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $province): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($province['province_id']); ?>"><?php echo e($province['province']); ?></option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
                                             <option value="" disabled>Data provinsi tidak tersedia.</option>
-                                        @endif
+                                        <?php endif; ?>
                                     </select>
                                     <small class="form-text text-danger d-none" id="destination-province-error">Provinsi tujuan harus dipilih.</small>
                                 </div>
@@ -182,11 +184,11 @@
             </div>
 
         </form>
-    @endif
+    <?php endif; ?>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('script')
+<?php $__env->startPush('script'); ?>
 <script>
     $(document).ready(function() {
 
@@ -320,10 +322,10 @@
             }
 
             $.ajax({
-                url: "{{ route('calculateShipping') }}",
+                url: "<?php echo e(route('calculateShipping')); ?>",
                 type: 'POST',
                 data: {
-                    _token: "{{ csrf_token() }}",
+                    _token: "<?php echo e(csrf_token()); ?>",
                     origin_province: formData.get('origin_province'),
                     origin_city: formData.get('origin_city'),
                     destination_province: formData.get('destination_province'),
@@ -391,10 +393,10 @@
 
             // Kirim request ke backend Laravel untuk Midtrans
             $.ajax({
-                url: "{{ route('checkout.payment') }}",
+                url: "<?php echo e(route('checkout.payment')); ?>",
                 type: 'POST',
                 data: {
-                    _token: "{{ csrf_token() }}",
+                    _token: "<?php echo e(csrf_token()); ?>",
                     shipping_cost: selectedOption
                 },
                 success: function(response) {
@@ -471,4 +473,6 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('user.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\ASUS\Documents\MSIB\e_commerce\pw1-bast7-bayu\Tugas7\resources\views/pages/cart/index.blade.php ENDPATH**/ ?>

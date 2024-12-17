@@ -52,6 +52,7 @@ class ProductController extends DashboardController
         try {
             $validated = $request->validated();
 
+
             $produk = new Produk;
             $produk->kategori_id = $validated['kategori_id'];
             $produk->nama = $validated['nama'];

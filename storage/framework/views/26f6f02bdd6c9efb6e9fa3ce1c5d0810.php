@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('container')
+<?php $__env->startSection('container'); ?>
     <p>Body Products</p>
 
     <!-- Filter Kategori -->
@@ -8,9 +6,9 @@
         <label for="category-filter">Filter berdasarkan Kategori:</label>
         <select id="category-filter" class="form-control" onchange="filterProductsByCategory()">
             <option value="">Semua Kategori</option>
-            @foreach ($kategoris as $kategori)
-                <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
-            @endforeach
+            <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->nama); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </select>
     </div>
 
@@ -22,21 +20,21 @@
     </button>
 
     <div id="product-list" class="row mt-3">
-        @foreach($products as $product)
+        <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="card" style="width: 18rem; margin: 10px;">
-                <img src="{{ asset('storage/' . $product->foto_produk) }}" class="card-img-top" alt="{{ $product->nama }}">
+                <img src="<?php echo e(asset('storage/' . $product->foto_produk)); ?>" class="card-img-top" alt="<?php echo e($product->nama); ?>">
                 <div class="card-body">
-                    <h5 class="card-title">{{ $product->nama }}</h5>
-                    <p class="card-text">{{ $product->deskripsi }}</p>
-                    <p class="card-text">Rp {{ number_format($product->harga, 2, ',', '.') }}</p>
+                    <h5 class="card-title"><?php echo e($product->nama); ?></h5>
+                    <p class="card-text"><?php echo e($product->deskripsi); ?></p>
+                    <p class="card-text">Rp <?php echo e(number_format($product->harga, 2, ',', '.')); ?></p>
 
                     <!-- Button Edit -->
-                    <a href="#" class="btn btn-primary" onclick="editProduct({{ $product->toJson() }})" data-toggle="modal" data-target="#exampleModal">Edit</a>
+                    <a href="#" class="btn btn-primary" onclick="editProduct(<?php echo e($product->toJson()); ?>)" data-toggle="modal" data-target="#exampleModal">Edit</a>
 
                     <!-- Button Delete -->
-                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
+                    <form action="<?php echo e(route('products.destroy', $product->id)); ?>" method="POST" style="display: inline;">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('DELETE'); ?>
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus produk ini?')">Delete</button>
                     </form>
                     <button type="button" class="btn btn-success " data-toggle="modal" data-target="#checkoutModal">
@@ -45,7 +43,7 @@
 
                 </div>
             </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
 
@@ -60,20 +58,20 @@
                     </button>
                 </div>
                 <form id="checkout-form">
-                    @csrf
+                    <?php echo csrf_field(); ?>
                     <div class="modal-body">
                         <!-- Pilih Provinsi Asal -->
                         <div class="form-group">
                             <label for="origin-province" class="col-form-label">Provinsi Asal:</label>
                             <select class="form-control" id="origin-province" name="origin_province" required>
                                 <option value="">Pilih Provinsi Asal</option>
-                                @if(isset($provinces) && count($provinces) > 0)
-                                    @foreach ($provinces as $province)
-                                        <option value="{{ $province['province_id'] }}">{{ $province['province'] }}</option>
-                                    @endforeach
-                                @else
+                                <?php if(isset($provinces) && count($provinces) > 0): ?>
+                                    <?php $__currentLoopData = $provinces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $province): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($province['province_id']); ?>"><?php echo e($province['province']); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php else: ?>
                                     <option value="" disabled>Data provinsi tidak tersedia.</option>
-                                @endif
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -90,13 +88,13 @@
                             <label for="destination-province" class="col-form-label">Provinsi Tujuan:</label>
                             <select class="form-control" id="destination-province" name="destination_province" required>
                                 <option value="">Pilih Provinsi Tujuan</option>
-                                @if(isset($provinces) && count($provinces) > 0)
-                                    @foreach ($provinces as $province)
-                                        <option value="{{ $province['province_id'] }}">{{ $province['province'] }}</option>
-                                    @endforeach
-                                @else
+                                <?php if(isset($provinces) && count($provinces) > 0): ?>
+                                    <?php $__currentLoopData = $provinces; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $province): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($province['province_id']); ?>"><?php echo e($province['province']); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php else: ?>
                                     <option value="" disabled>Data provinsi tidak tersedia.</option>
-                                @endif
+                                <?php endif; ?>
                             </select>
                         </div>
 
@@ -145,16 +143,16 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form id="product-form" enctype="multipart/form-data" method="POST" action="{{ route('produk.store') }}">
-                    @csrf
+                <form id="product-form" enctype="multipart/form-data" method="POST" action="<?php echo e(route('produk.store')); ?>">
+                    <?php echo csrf_field(); ?>
                     <div class="modal-body">
                         <!-- Kategori -->
                         <label for="kategori" class="col-form-label">Kategori:</label>
                         <select class="form-control" id="kategori" name="kategori_id" required>
                             <option value="">Pilih Kategori</option>
-                            @foreach ($kategoris as $kategori)
-                                <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->nama); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
 
                         <!-- Nama Produk -->
@@ -187,9 +185,9 @@
     </div>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
 
     $(document).ready(function() {
@@ -319,116 +317,115 @@
 
 
     function submitCheckout() {
-        let form = document.getElementById('checkout-form');
-        let data = new FormData(form);
+    let form = document.getElementById('checkout-form');
+    let data = new FormData(form);
 
-        if (!data.get('origin_city') || !data.get('destination_city') || !data.get('weight') || !data.get('courier')) {
-            alert('Harap lengkapi semua field sebelum melanjutkan.');
-            return;
-        }
+    if (!data.get('origin_city') || !data.get('destination_city') || !data.get('weight') || !data.get('courier')) {
+        alert('Harap lengkapi semua field sebelum melanjutkan.');
+        return;
+    }
 
-        $.ajax({
-            url: "{{ route('calculateShipping') }}",
-            type: 'POST',
-            data: {
-                _token: "{{ csrf_token() }}",
-                origin: data.get('origin_city'),
-                destination: data.get('destination_city'),
-                weight: data.get('weight'),
-                courier: data.get('courier')
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    document.getElementById('checkout-form').style.display = 'none';
-                    showResultForm(response.data);
-                } else {
-                    alert('Gagal mendapatkan ongkos kirim: ' + response.message);
-                }
-            },
-            error: function(xhr) {
-                console.error(xhr);
-                alert('Terjadi kesalahan saat memproses checkout');
+    $.ajax({
+        url: "<?php echo e(route('calculateShipping')); ?>",
+        type: 'POST',
+        data: {
+            _token: "<?php echo e(csrf_token()); ?>",
+            origin: data.get('origin_city'),
+            destination: data.get('destination_city'),
+            weight: data.get('weight'),
+            courier: data.get('courier')
+        },
+        success: function(response) {
+            if (response.status === 'success') {
+                document.getElementById('checkout-form').style.display = 'none';
+                showResultForm(response.data);
+            } else {
+                alert('Gagal mendapatkan ongkos kirim: ' + response.message);
             }
-        });
+        },
+        error: function(xhr) {
+            console.error(xhr);
+            alert('Terjadi kesalahan saat memproses checkout');
+        }
+    });
     }
 
     function showResultForm(data) {
-        let container = document.getElementById('checkout-result');
-        container.innerHTML = '';
+    let container = document.getElementById('checkout-result');
+    container.innerHTML = '';
 
-        let formElement = document.createElement('form');
-        formElement.setAttribute('id', 'result-form');
-        formElement.style.padding = '7px';
+    let formElement = document.createElement('form');
+    formElement.setAttribute('id', 'result-form');
+    formElement.style.padding = '7px';
 
-        data.forEach((courier, courierIndex) => {
-            let courierElement = document.createElement('div');
-            courierElement.innerHTML = `<h4>${courier.name}</h4>`;
+    data.forEach((courier, courierIndex) => {
+        let courierElement = document.createElement('div');
+        courierElement.innerHTML = `<h4>${courier.name}</h4>`;
 
-            courier.costs.forEach((costOption, index) => {
-                courierElement.innerHTML += `
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="shipping_option" id="shipping_${courierIndex}_${index}" value="${costOption.cost[0].value}">
-                        <label class="form-check-label" for="shipping_${courierIndex}_${index}">
-                            ${costOption.service} (${costOption.description}) - Harga: Rp ${costOption.cost[0].value} - Estimasi: ${costOption.cost[0].etd} hari
-                        </label>
-                    </div>`;
-            });
-
-            formElement.appendChild(courierElement);
+        courier.costs.forEach((costOption, index) => {
+            courierElement.innerHTML += `
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="shipping_option" id="shipping_${courierIndex}_${index}" value="${costOption.cost[0].value}">
+                    <label class="form-check-label" for="shipping_${courierIndex}_${index}">
+                        ${costOption.service} (${costOption.description}) - Harga: Rp ${costOption.cost[0].value} - Estimasi: ${costOption.cost[0].etd} hari
+                    </label>
+                </div>`;
         });
 
-        let submitButtonContainer = document.createElement('div');
-        submitButtonContainer.classList.add('d-flex', 'justify-content-end', 'mt-2');
+        formElement.appendChild(courierElement);
+    });
 
-        let submitButton = document.createElement('button');
-        submitButton.type = 'button';
-        submitButton.className = 'btn btn-primary';
-        submitButton.innerHTML = 'Lanjutkan ke Pembayaran';
-        submitButton.onclick = processPayment;
+    let submitButtonContainer = document.createElement('div');
+    submitButtonContainer.classList.add('d-flex', 'justify-content-end', 'mt-2');
 
-        submitButtonContainer.appendChild(submitButton);
-        formElement.appendChild(submitButtonContainer);
-        container.appendChild(formElement);
+    let submitButton = document.createElement('button');
+    submitButton.type = 'button';
+    submitButton.className = 'btn btn-primary';
+    submitButton.innerHTML = 'Lanjutkan ke Pembayaran';
+    submitButton.onclick = processPayment;
+
+    submitButtonContainer.appendChild(submitButton);
+    formElement.appendChild(submitButtonContainer);
+    container.appendChild(formElement);
     }
 
     function processPayment() {
-        let selectedShippingOption = document.querySelector('input[name="shipping_option"]:checked');
-        if (!selectedShippingOption) {
-            alert("Pilih opsi pengiriman terlebih dahulu.");
-            return;
-        }
+    let selectedShippingOption = document.querySelector('input[name="shipping_option"]:checked');
+    if (!selectedShippingOption) {
+        alert("Pilih opsi pengiriman terlebih dahulu.");
+        return;
+    }
 
-        let selectedProductId = 12;
-        console.log("Selected Product ID:", selectedProductId);
+    let selectedProductId = 12;
+    console.log("Selected Product ID:", selectedProductId);
 
-        let data = {
-            _token: "{{ csrf_token() }}",
-            pelanggan_id: {{ auth()->user()->id }},
-            produk_id: selectedProductId,
-            shipping_cost: selectedShippingOption.value,
-            shipping_service: selectedShippingOption.nextElementSibling ? selectedShippingOption.nextElementSibling.innerText : ''
-        };
+    let data = {
+        _token: "<?php echo e(csrf_token()); ?>",
+        pelanggan_id: <?php echo e(auth()->user()->id); ?>,
+        produk_id: selectedProductId,
+        shipping_cost: selectedShippingOption.value,
+        shipping_service: selectedShippingOption.nextElementSibling ? selectedShippingOption.nextElementSibling.innerText : ''
+    };
 
-        $.ajax({
-            url: "{{ route('checkout.saveTransaction') }}",
-            type: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-            },
-            data: data,
-            success: function(response) {
-                if (response.status === 'success') {
-                    window.location.href = "{{ route('transaksi.index') }}";
-                } else {
-                    alert('Gagal menyimpan data transaksi: ' + response.message);
-                }
-            },
-            error: function(xhr) {
-                console.error(xhr);
-                alert('Terjadi kesalahan saat memproses transaksi. Silakan coba lagi.');
+    $.ajax({
+        url: "<?php echo e(route('checkout.saveTransaction')); ?>",
+        type: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': "<?php echo e(csrf_token()); ?>"
+        },
+        data: data,
+        success: function(response) {
+            if (response.status === 'success') {
+                window.location.href = "<?php echo e(route('transaksi.index')); ?>";
+            } else {
+                alert('Gagal menyimpan data transaksi: ' + response.message);
             }
-        });
-
+        },
+        error: function(xhr) {
+            console.error(xhr);
+            alert('Terjadi kesalahan saat memproses transaksi. Silakan coba lagi.');
+        }
+    });
     showResultForm(data);
     }
 
@@ -437,7 +434,7 @@
         let data = new FormData(form);
 
         $.ajax({
-            url: form.getAttribute('action') || "{{ route('products.store') }}",
+            url: form.getAttribute('action') || "<?php echo e(route('products.store')); ?>",
             type: form.getAttribute('method') || 'POST',
             data: data,
             contentType: false,
@@ -469,7 +466,7 @@
 
     function resetForm() {
         document.getElementById('exampleModalLabel').innerText = 'Tambah Produk';
-        document.getElementById('product-form').action = "{{ route('products.store') }}";
+        document.getElementById('product-form').action = "<?php echo e(route('products.store')); ?>";
         document.getElementById('product-form').method = 'POST';
         document.querySelector('input[name="_method"]')?.remove();
         document.getElementById('kategori').value = '';
@@ -483,4 +480,6 @@
         resetForm();
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\ASUS\Documents\MSIB\e_commerce\pw1-bast7-bayu\Tugas7\resources\views/pages/admin/produk.blade.php ENDPATH**/ ?>

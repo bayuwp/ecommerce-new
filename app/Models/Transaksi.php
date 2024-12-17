@@ -21,18 +21,18 @@ class Transaksi extends Model
         'transaction_time',
         'transaction_status',
         'metadata',
-        'pelanggan_id', // Tambahkan ini
-        'produk_id',    // Tambahkan ini
+        'user_id',    // Ganti pelanggan_id dengan user_id
+        'produk_id',
     ];
 
     /**
-     * Mendefinisikan relasi banyak ke satu dengan model Pelanggan.
+     * Mendefinisikan relasi banyak ke satu dengan model User.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function pelanggan()
+    public function user()
     {
-        return $this->belongsTo(Pelanggan::class, 'pelanggan_id'); // Ganti dengan kolom foreign key yang sesuai jika ada
+        return $this->belongsTo(User::class, 'user_id'); // Relasi ke model User menggunakan kolom user_id
     }
 
     /**
@@ -42,6 +42,6 @@ class Transaksi extends Model
      */
     public function produk()
     {
-        return $this->belongsTo(Produk::class, 'produk_id'); // Ganti dengan kolom foreign key yang sesuai jika ada
+        return $this->belongsTo(Produk::class, 'produk_id'); // Relasi ke model Produk
     }
 }

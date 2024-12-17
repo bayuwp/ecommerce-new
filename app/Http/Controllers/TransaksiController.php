@@ -15,7 +15,7 @@ class TransaksiController extends Controller
     public function index()
     {
         $transaktions = Transaksi::all();
-        $pelanggans = Pelanggan::all();
+        $users = user::all();
         $produks = Produk::all();
 
         return view('pages.admin.transaksi', compact('transaktions', 'pelanggans', 'produks'));
@@ -25,7 +25,7 @@ class TransaksiController extends Controller
     {
         // Validasi input
         $request->validate([
-            'pelanggan_id' => 'required|exists:pelanggan,id',
+            'user_id' => 'required|exists:user,id',
             'produk_id' => 'required|exists:produk,id',
             'transaction_id' => 'required|integer',
             'order_id' => 'required|string|max:100',
@@ -45,7 +45,7 @@ class TransaksiController extends Controller
             $transaction->transaction_time = $request->transaction_time ?? now();
             $transaction->transaction_status = $request->transaction_status;
             $transaction->metadata = $request->metadata ? json_encode($request->metadata) : null;
-            $transaction->pelanggan_id = $request->pelanggan_id;
+            $transaction->user_id = $request->user_id;
             $transaction->produk_id = $request->produk_id;
             $transaction->save();
 
