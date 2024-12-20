@@ -12,6 +12,7 @@ class ShippingController extends Controller
      */
     public function calculateShipping(Request $request)
     {
+        // return $request;
         // Validasi input dari form
         $validatedData = $request->validate([
             'origin_province' => 'required',
@@ -37,7 +38,9 @@ class ShippingController extends Controller
 
             if (isset($data['rajaongkir']['results'][0]['costs'])) {
                 return response()->json([
-                    'success' => true,
+                    'status' => 'success',
+                    // 'data' => $data,
+                    'request' => $request,
                     'data' => $data['rajaongkir']['results'][0]['costs'],
                 ]);
             }

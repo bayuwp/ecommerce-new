@@ -65,7 +65,6 @@ class ProductController extends DashboardController
                 $foto = $request->file('foto_produk');
                 $fotoPath = $foto->store('uploads', 'public');
                 $produk->foto_produk = $fotoPath;
-
             }
             $produk->save();
 

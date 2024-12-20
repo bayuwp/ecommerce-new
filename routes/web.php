@@ -71,7 +71,7 @@ Route::middleware(['check.auth'])->group(function () {
 
     Route::get('/provinces', [ShippingController::class, 'getProvinces']);
     Route::get('/cities/{province_id}', [ShippingController::class, 'getCities']);
-    Route::post('/shipping/calculate', [ShippingController::class, 'calculateShipping']);
+    Route::post('/shipping/calculate', [ShippingController::class, 'calculateShipping'])->name('calculateShipping');
     Route::get('/shipping/cities', [ShippingController::class, 'getCities']);
 
     Route::post('/checkout/payment', [PaymentController::class, 'processPayment'])->name('checkout.payment');

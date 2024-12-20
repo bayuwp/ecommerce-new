@@ -317,115 +317,116 @@
 
 
     function submitCheckout() {
-    let form = document.getElementById('checkout-form');
-    let data = new FormData(form);
+        let form = document.getElementById('checkout-form');
+        let data = new FormData(form);
 
-    if (!data.get('origin_city') || !data.get('destination_city') || !data.get('weight') || !data.get('courier')) {
-        alert('Harap lengkapi semua field sebelum melanjutkan.');
-        return;
-    }
-
-    $.ajax({
-        url: "<?php echo e(route('calculateShipping')); ?>",
-        type: 'POST',
-        data: {
-            _token: "<?php echo e(csrf_token()); ?>",
-            origin: data.get('origin_city'),
-            destination: data.get('destination_city'),
-            weight: data.get('weight'),
-            courier: data.get('courier')
-        },
-        success: function(response) {
-            if (response.status === 'success') {
-                document.getElementById('checkout-form').style.display = 'none';
-                showResultForm(response.data);
-            } else {
-                alert('Gagal mendapatkan ongkos kirim: ' + response.message);
-            }
-        },
-        error: function(xhr) {
-            console.error(xhr);
-            alert('Terjadi kesalahan saat memproses checkout');
+        if (!data.get('origin_city') || !data.get('destination_city') || !data.get('weight') || !data.get('courier')) {
+            alert('Harap lengkapi semua field sebelum melanjutkan.');
+            return;
         }
-    });
+
+        $.ajax({
+            url: "<?php echo e(route('calculateShipping')); ?>",
+            type: 'POST',
+            data: {
+                _token: "<?php echo e(csrf_token()); ?>",
+                origin: data.get('origin_city'),
+                destination: data.get('destination_city'),
+                weight: data.get('weight'),
+                courier: data.get('courier')
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    document.getElementById('checkout-form').style.display = 'none';
+                    showResultForm(response.data);
+                } else {
+                    alert('Gagal mendapatkan ongkos kirim: ' + response.message);
+                }
+            },
+            error: function(xhr) {
+                console.error(xhr);
+                alert('Terjadi kesalahan saat memproses checkout');
+            }
+        });
     }
 
     function showResultForm(data) {
-    let container = document.getElementById('checkout-result');
-    container.innerHTML = '';
+        let container = document.getElementById('checkout-result');
+        container.innerHTML = '';
 
-    let formElement = document.createElement('form');
-    formElement.setAttribute('id', 'result-form');
-    formElement.style.padding = '7px';
+        let formElement = document.createElement('form');
+        formElement.setAttribute('id', 'result-form');
+        formElement.style.padding = '7px';
 
-    data.forEach((courier, courierIndex) => {
-        let courierElement = document.createElement('div');
-        courierElement.innerHTML = `<h4>${courier.name}</h4>`;
+        data.forEach((courier, courierIndex) => {
+            let courierElement = document.createElement('div');
+            courierElement.innerHTML = `<h4>${courier.name}</h4>`;
 
-        courier.costs.forEach((costOption, index) => {
-            courierElement.innerHTML += `
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="shipping_option" id="shipping_${courierIndex}_${index}" value="${costOption.cost[0].value}">
-                    <label class="form-check-label" for="shipping_${courierIndex}_${index}">
-                        ${costOption.service} (${costOption.description}) - Harga: Rp ${costOption.cost[0].value} - Estimasi: ${costOption.cost[0].etd} hari
-                    </label>
-                </div>`;
+            courier.costs.forEach((costOption, index) => {
+                courierElement.innerHTML += `
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="shipping_option" id="shipping_${courierIndex}_${index}" value="${costOption.cost[0].value}">
+                        <label class="form-check-label" for="shipping_${courierIndex}_${index}">
+                            ${costOption.service} (${costOption.description}) - Harga: Rp ${costOption.cost[0].value} - Estimasi: ${costOption.cost[0].etd} hari
+                        </label>
+                    </div>`;
+            });
+
+            formElement.appendChild(courierElement);
         });
 
-        formElement.appendChild(courierElement);
-    });
+        let submitButtonContainer = document.createElement('div');
+        submitButtonContainer.classList.add('d-flex', 'justify-content-end', 'mt-2');
 
-    let submitButtonContainer = document.createElement('div');
-    submitButtonContainer.classList.add('d-flex', 'justify-content-end', 'mt-2');
+        let submitButton = document.createElement('button');
+        submitButton.type = 'button';
+        submitButton.className = 'btn btn-primary';
+        submitButton.innerHTML = 'Lanjutkan ke Pembayaran';
+        submitButton.onclick = processPayment;
 
-    let submitButton = document.createElement('button');
-    submitButton.type = 'button';
-    submitButton.className = 'btn btn-primary';
-    submitButton.innerHTML = 'Lanjutkan ke Pembayaran';
-    submitButton.onclick = processPayment;
-
-    submitButtonContainer.appendChild(submitButton);
-    formElement.appendChild(submitButtonContainer);
-    container.appendChild(formElement);
+        submitButtonContainer.appendChild(submitButton);
+        formElement.appendChild(submitButtonContainer);
+        container.appendChild(formElement);
     }
 
     function processPayment() {
-    let selectedShippingOption = document.querySelector('input[name="shipping_option"]:checked');
-    if (!selectedShippingOption) {
-        alert("Pilih opsi pengiriman terlebih dahulu.");
-        return;
-    }
-
-    let selectedProductId = 12;
-    console.log("Selected Product ID:", selectedProductId);
-
-    let data = {
-        _token: "<?php echo e(csrf_token()); ?>",
-        pelanggan_id: <?php echo e(auth()->user()->id); ?>,
-        produk_id: selectedProductId,
-        shipping_cost: selectedShippingOption.value,
-        shipping_service: selectedShippingOption.nextElementSibling ? selectedShippingOption.nextElementSibling.innerText : ''
-    };
-
-    $.ajax({
-        url: "<?php echo e(route('checkout.saveTransaction')); ?>",
-        type: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': "<?php echo e(csrf_token()); ?>"
-        },
-        data: data,
-        success: function(response) {
-            if (response.status === 'success') {
-                window.location.href = "<?php echo e(route('transaksi.index')); ?>";
-            } else {
-                alert('Gagal menyimpan data transaksi: ' + response.message);
-            }
-        },
-        error: function(xhr) {
-            console.error(xhr);
-            alert('Terjadi kesalahan saat memproses transaksi. Silakan coba lagi.');
+        let selectedShippingOption = document.querySelector('input[name="shipping_option"]:checked');
+        if (!selectedShippingOption) {
+            alert("Pilih opsi pengiriman terlebih dahulu.");
+            return;
         }
-    });
+
+        let selectedProductId = 12;
+        console.log("Selected Product ID:", selectedProductId);
+
+        let data = {
+            _token: "<?php echo e(csrf_token()); ?>",
+            pelanggan_id: <?php echo e(auth()->user()->id); ?>,
+            produk_id: selectedProductId,
+            shipping_cost: selectedShippingOption.value,
+            shipping_service: selectedShippingOption.nextElementSibling ? selectedShippingOption.nextElementSibling.innerText : ''
+        };
+
+        $.ajax({
+            url: "<?php echo e(route('checkout.saveTransaction')); ?>",
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': "<?php echo e(csrf_token()); ?>"
+            },
+            data: data,
+            success: function(response) {
+                if (response.status === 'success') {
+                    window.location.href = "<?php echo e(route('transaksi.index')); ?>";
+                } else {
+                    alert('Gagal menyimpan data transaksi: ' + response.message);
+                }
+            },
+            error: function(xhr) {
+                console.error(xhr);
+                alert('Terjadi kesalahan saat memproses transaksi. Silakan coba lagi.');
+            }
+        });
+
     showResultForm(data);
     }
 

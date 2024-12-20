@@ -32,7 +32,7 @@
                         <input type="checkbox" class="transaction-checkbox" data-amount="<?php echo e($transaksi->gross_amount); ?>" aria-label="Pilih transaksi <?php echo e($transaksi->order_id); ?>">
                     </td>
                     <td><?php echo e($transaksi->order_id); ?></td>
-                    <td><?php echo e($transaksi->pelanggan->nama_lengkap ?? 'N/A'); ?></td>
+                    <td><?php echo e($transaksi->user_id->name ?? 'N/A'); ?></td>
                     <td><?php echo e($transaksi->produk->nama ?? 'N/A'); ?></td>
                     <td><?php echo e($transaksi->payment_type ?? 'N/A'); ?></td>
                     <td>Rp <?php echo e(number_format($transaksi->gross_amount, 0, ',', '.')); ?></td>

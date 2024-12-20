@@ -13,7 +13,6 @@
     <table class="table table-bordered mt-3">
         <thead class="table-light">
             <tr>
-                <th>Pilih</th>
                 <th>ID Order</th>
                 <th>User</th>  <!-- Ganti 'Pelanggan' menjadi 'User' -->
                 <th>Produk</th>
@@ -28,11 +27,8 @@
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $transaktions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $transaksi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>
-                        <input type="checkbox" class="transaction-checkbox" data-amount="<?php echo e($transaksi->gross_amount); ?>" aria-label="Pilih transaksi <?php echo e($transaksi->order_id); ?>">
-                    </td>
                     <td><?php echo e($transaksi->order_id); ?></td>
-                    <td><?php echo e($transaksi->user->name ?? 'N/A'); ?></td> <!-- Menampilkan nama user yang terkait -->
+                    <td><?php echo e($transaksi->user->name ?? 'N/A'); ?></td>
                     <td><?php echo e($transaksi->produk->nama ?? 'N/A'); ?></td>
                     <td><?php echo e($transaksi->payment_type ?? 'N/A'); ?></td>
                     <td>Rp <?php echo e(number_format($transaksi->gross_amount, 0, ',', '.')); ?></td>

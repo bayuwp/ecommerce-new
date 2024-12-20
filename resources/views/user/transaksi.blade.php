@@ -15,7 +15,6 @@
     <table class="table table-bordered mt-3">
         <thead class="table-light">
             <tr>
-                <th>Pilih</th>
                 <th>ID Order</th>
                 <th>User</th>  <!-- Ganti 'Pelanggan' menjadi 'User' -->
                 <th>Produk</th>
@@ -30,11 +29,8 @@
         <tbody>
             @forelse($transaktions as $transaksi)
                 <tr>
-                    <td>
-                        <input type="checkbox" class="transaction-checkbox" data-amount="{{ $transaksi->gross_amount }}" aria-label="Pilih transaksi {{ $transaksi->order_id }}">
-                    </td>
                     <td>{{ $transaksi->order_id }}</td>
-                    <td>{{ $transaksi->user->name ?? 'N/A' }}</td> <!-- Menampilkan nama user yang terkait -->
+                    <td>{{ $transaksi->user->name ?? 'N/A' }}</td>
                     <td>{{ $transaksi->produk->nama ?? 'N/A' }}</td>
                     <td>{{ $transaksi->payment_type ?? 'N/A' }}</td>
                     <td>Rp {{ number_format($transaksi->gross_amount, 0, ',', '.') }}</td>

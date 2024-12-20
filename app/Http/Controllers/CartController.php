@@ -65,6 +65,7 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
         // Validasi input
         $request->validate([
             'user_id' => 'required|exists:users,id',
