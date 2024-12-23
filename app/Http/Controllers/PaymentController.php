@@ -17,6 +17,9 @@ class PaymentController extends Controller
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
+        // return response()->json(['item'=>$request->input('items')]);
+        $items = $request ->input('items');
+
         $request->validate([
             'shipping_cost' => 'required|integer',
         ]);
@@ -28,14 +31,25 @@ class PaymentController extends Controller
 
         $transactionDetails = [
             'transaction_details' => [
-                'order_id' => uniqid(),
-                'gross_amount' => $totalAmount,
+                'order_id' => uniqid(), // Menggunakan uniqid() untuk menghasilkan ID unik
+                'gross_amount' => $totalAmount, // Total jumlah pembayaran
             ],
             'customer_details' => [
-                'first_name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone ?? '081234567890',
+                'first_name' => $user->name, // Nama pelanggan
+                'email' => $user->email, // Email pelanggan
+                'phone' => $user->phone ?? '081234567890', // Nomor telepon, default jika null
             ],
+            'item_details' => array_merge(
+                $items, // Detail item produk yang dibeli
+                [
+                    [
+                        'id' => 'ongkir', // ID untuk ongkos kirim
+                        'price' => $shippingCost, // Harga ongkos kirim
+                        'quantity' => 1, // Jumlah (biasanya 1 untuk ongkos kirim)
+                        'name' => 'Ongkir', // Nama item ongkos kirim
+                    ],
+                ]
+            ),
         ];
 
         try {

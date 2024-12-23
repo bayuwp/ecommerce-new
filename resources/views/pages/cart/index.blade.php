@@ -56,7 +56,14 @@
                             <td>Rp <span class="price">{{ number_format($cart->produk->harga, 0, ',', '.') }}</span></td>
                             <td class="subtotal"> <span id="subtotal-{{ $cart->id }}">{{ number_format($cart->produk->harga * $cart->quantity, 0, ',', '.') }}</span></td>
                             <td>
-                                <input type="checkbox" class="transaction-checkbox" name="selected_products[]" value="{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-amount="{{ $cart->produk->harga * $cart->quantity }}" {{ in_array($cart->id, old('selected_products', [])) ? 'checked' : '' }}>
+                                <input type="checkbox" class="transaction-checkbox" name="selected_products[]"
+                                value="{{ $cart->id }}"
+                                {{-- data-cart-id="{{ $cart->id}}" --}}
+                                data-selected-item-id='{{ $cart->produk->id }}'
+                                data-selected-item-price='{{ $cart->produk->harga }}'
+                                data-selected-item-quantity='{{ $cart->quantity }}'
+                                data-selected-item-name='{{ $cart->produk->nama }}'
+                                data-amount="{{ $cart->produk->harga * $cart->quantity }}" {{ in_array($cart->id, old('selected_products', [])) ? 'checked' : '' }}>
                                 {{-- <input type="hidden" id="quantity-hidden-{{ $cart->id }}" name="quantities[{{ $cart->id }}]" value="{{ $cart->quantity }}" disabled> --}}
                             </td>
                             <td class="px-6 py-4">
@@ -80,6 +87,7 @@
                             echo number_format($total, 0, ',', '.');
                         @endphp
                     </span></h3>
+
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#checkoutModal">Checkout</button>
                 </div>
             </div>
@@ -363,8 +371,8 @@
             const container = $('#checkout-result');
             container.empty();
 
-            dataRequest = data.request
-            data = data.data
+            dataRequest = data.request;
+            data = data.data;
             if (!data || data.length === 0) {
                 console.log("No shipping options available.");
                 container.append('<p>Tidak ada pilihan pengiriman tersedia.</p>');
@@ -404,12 +412,30 @@
 
             console.log("Form appended to container:", container);
             $('#checkoutResult').modal('show');
+
+            const selectedOption = $('input[name="shipping_option"]:checked').val();
+            if (selectedOption) {
+                const shippingCost = parseInt(selectedOption);
+                const subtotal = parseInt($('#totalHarga').text().replace(/[^0-9]/g, ''));
+                const total = subtotal + shippingCost;
+
+                $('#totalHarga').text(formatCurrency(total));
+            }
         }
 
-
         function processPayment(dataRequest) {
-            console.log("dataRequest", dataRequest)
+            // console.log("dataRequest", dataRequest)
             const selectedOption = $('input[name="shipping_option"]:checked').val();
+            let checkoutedata ={ item: []}
+            $('.transaction-checkbox:checked').each(function() {
+                let items={
+                    id:$(this).data('selected-item-id'),
+                    price:$(this).data('selected-item-price'),
+                    quantity:$(this).data('selected-item-quantity'),
+                    name:$(this).data('selected-item-name')
+                }
+                checkoutedata.item.push(items)
+            });
 
             $.ajax({
                 url: "{{ route('checkout.payment') }}",
@@ -417,8 +443,10 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     shipping_cost: selectedOption,
+                    items: checkoutedata.item
                 },
                 success: function(response) {
+                    console.log(response);
                     if (response.status === 'success') {
                         window.snap.pay(response.token, {
                             onSuccess: function(result) {
@@ -464,6 +492,9 @@
             });
         }
 
+        function formatCurrency(amount) {
+            return amount.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }).replace('Rp', '').trim();
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             const qtyInputs = document.querySelectorAll('.qty-input');
@@ -492,6 +523,10 @@
                     total += subtotal;
                 });
 
+                // Update the total with the shipping cost
+                const shippingCost = parseInt($('input[name="shipping_option"]:checked').val() || 0);
+                total += shippingCost;
+
                 document.getElementById('totalHarga').textContent = total.toLocaleString('id-ID');
             }
 
@@ -501,5 +536,7 @@
                 checkbox.addEventListener('change', updateTotal);
             });
         });
+
+
     </script>
 @endpush

@@ -1,4 +1,22 @@
 <?php $__env->startSection('container'); ?>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" style="max-width: 70%; margin: 0 auto;">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://storage.googleapis.com/eraspacelink/pmp/production/banners/images/u3Eu0k4NtpR1nMMKKKvajjzTYKmTyOtJSr04OLjY.jpg" class="d-block w-100" alt="..." style="height: 500px; object-fit: contain;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://png.pngtree.com/template/20220331/ourmid/pngtree-new-sports-shoes-promotion-rotation-banner-image_909903.jpg" class="d-block w-100" alt="..." style="height: 500px; object-fit: contain;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://sportaways.com/media/rokanthemes/blog/images/b/n/bn1.jpg" class="d-block w-100" alt="..." style="height: 500px; object-fit: contain;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://sportaways.com/media/rokanthemes/blog/images/b/n/bn3.jpg" class="d-block w-100" alt="..." style="height: 500px; object-fit: contain;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://i.ytimg.com/vi/fBonRLiYdYA/maxresdefault.jpg" class="d-block w-100" alt="..." style="height: 500px; object-fit: contain;">
+            </div>
+        </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -8,6 +26,7 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+
 
     <div class="container">
         <div class="row">
@@ -23,7 +42,7 @@
                             <input type="hidden" name="quantity" id="quantity_<?php echo e($item->id); ?>" class="form-control" min="1" value="1" required>
                             <div class="button">
                                 <button type="submit" class="btn"><i class="lni lni-cart"></i> Add to Cart</button>
-                            </div>  
+                            </div>
                         </form>
                     </div>
                     <div class="product-info">

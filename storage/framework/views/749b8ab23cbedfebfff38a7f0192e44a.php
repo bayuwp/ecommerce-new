@@ -110,8 +110,8 @@
                     <div class="top-middle">
                         <ul class="useful-links">
                             <li><a href="<?php echo e(url('/')); ?>">Home</a></li>
-                            <li><a href="about-us.html">About Us</a></li>
-                            <li><a href="contact.html">Contact Us</a></li>
+                            <li><a href="">About Us</a></li>
+                            <li><a href="<?php echo e(url('/contact-us')); ?>">Contact Us</a></li>
                         </ul>
                     </div>
                 </div>

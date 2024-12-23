@@ -133,6 +133,8 @@ class CheckoutControllerUser extends Controller
         Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         Config::$isProduction = false;
 
+        return response()->json(['data' => $request->shipping_cost]);
+
         $transaction = Transaksi::where('order_id', $request->order_id)->first();
 
         if (!$transaction) {

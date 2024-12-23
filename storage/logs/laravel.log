@@ -10820,3 +10820,9 @@ Stack trace:
 #52 C:\\Users\\ASUS\\Documents\\MSIB\\e_commerce\\pw1-bast7-bayu\\Tugas7\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\ASUS\\\\D...')
 #53 {main}
 "} 
+[2024-12-22 15:36:15] local.ERROR: Error fetching provinces: cURL error 6: Could not resolve host: api.rajaongkir.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.rajaongkir.com/starter/province  
+[2024-12-22 15:36:23] local.ERROR: Error fetching provinces: cURL error 6: Could not resolve host: api.rajaongkir.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.rajaongkir.com/starter/province  
+[2024-12-22 15:36:58] local.ERROR: Error fetching provinces: cURL error 6: Could not resolve host: api.rajaongkir.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.rajaongkir.com/starter/province  
+[2024-12-22 15:37:21] local.ERROR: Error fetching provinces: cURL error 6: Could not resolve host: api.rajaongkir.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.rajaongkir.com/starter/province  
+[2024-12-22 15:37:48] local.ERROR: Error fetching provinces: cURL error 6: Could not resolve host: api.rajaongkir.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.rajaongkir.com/starter/province  
+[2024-12-22 15:40:08] local.ERROR: Error fetching provinces: cURL error 6: Could not resolve host: api.rajaongkir.com (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.rajaongkir.com/starter/province  

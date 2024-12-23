@@ -48,7 +48,7 @@ Route::middleware(['check.auth'])->group(function () {
     Route::get('/user/order', [CartController::class, 'userOrder'])->name('user.order');
     Route::post('/checkout/store', [CartController::class, 'store'])->name('checkout.store');
 
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
         // Rute untuk menampilkan produk berdasarkan kategori
     Route::get('/produk/kategori/{id}', [UserControllerProduct::class, 'byKategori'])->name('produk.byKategori');
@@ -76,6 +76,10 @@ Route::middleware(['check.auth'])->group(function () {
 
     Route::post('/checkout/payment', [PaymentController::class, 'processPayment'])->name('checkout.payment');
 
+    Route::get('/contact-us', function () {
+        return view('user.ContactUs');
+    });
+
     // Rute untuk admin
     Route::prefix('admin')->group(function () {
         Route::get('/produk', [ProductController::class, 'index'])->name('admin.produk.index');
@@ -91,6 +95,8 @@ Route::middleware(['check.auth'])->group(function () {
         Route::get('/transaksi/{id}', [TransactionController::class, 'show'])->name('admin.transaksi.show');
     });
 });
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/search', [HomeController::class, 'search'])->name('search');
 
